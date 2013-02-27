@@ -13,7 +13,7 @@ class Api {
 
     // API Path
     const API_PATH = "http://djpanel.dev.local/api/";
-    
+
 
     /**
      * Sends a command to the DJ Panel API Server
@@ -46,6 +46,20 @@ class Api {
     public static function getNowPlaying()
     {
         return self::sendCommand("nowplaying");
+    }
+
+    /**
+     * Submits a shoutout
+     * 
+     * @param string $content  Shoutout Content
+     * @param string $username Username of the person who sent the shoutout
+     * @param string $via      Shoutout submitted via (e.g Minecraft, TF2, Website)
+     *
+     * @return array
+     */
+    public static function submitShoutout($content, $username, $via)
+    {
+        return self::sendCommand("shoutout", array("content" => $content, "username" => $username, "via" => $via));
     }
 
 }
