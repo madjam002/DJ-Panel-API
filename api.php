@@ -13,6 +13,7 @@ class Api {
 
     // API Path
     const API_PATH = "http://djpanel.dev.local/api/";
+    const API_SECRET = "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3";
 
 
     /**
@@ -20,8 +21,10 @@ class Api {
      * @param array $parameters Request Parameters
      * @return array
      */
-    private static function sendCommand($path, $parameters = null)
+    private static function sendCommand($path, $parameters = array())
     {
+        $parameters["api_secret"] = self::API_SECRET;
+        
         $request = new HTTPRequest(self::API_PATH . "/" . $path, HTTP_METH_POST);
         $request->setRawPostData($parameters);
         $request->send();
@@ -50,7 +53,7 @@ class Api {
 
     /**
      * Submits a shoutout
-     * 
+     *
      * @param string $content  Shoutout Content
      * @param string $username Username of the person who sent the shoutout
      * @param string $via      Shoutout submitted via (e.g Minecraft, TF2, Website)
