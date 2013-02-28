@@ -24,11 +24,10 @@ class Api {
     private static function sendCommand($path, $parameters = array())
     {
         $parameters["api_secret"] = self::API_SECRET;
-        
-        $request = new HTTPRequest(self::API_PATH . "/" . $path, HTTP_METH_POST);
-        $request->setRawPostData($parameters);
-        $request->send();
-        $response = $request->getResponseBody();
+
+        $options = array("http" => array("method"  => 'POST', "content" => http_build_query($parameters)));
+        $context  = stream_context_create($options);
+        $response = file_get_contents(self::API_PATH . "/" . $path, false, $context);
 
         return json_decode($response);
     }
