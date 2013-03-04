@@ -12,7 +12,7 @@ class Api {
      */
 
     // API Path
-    const API_PATH = "http://djpanel.dev.local/api/";
+    const API_PATH = "http://djpanel.dev.local/api"; // Without trailing slash
     const API_SECRET = "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3";
 
 
@@ -25,9 +25,14 @@ class Api {
     {
         $parameters["api_secret"] = self::API_SECRET;
 
-        $options = array("http" => array("method"  => 'POST', "content" => http_build_query($parameters)));
-        $context  = stream_context_create($options);
-        $response = file_get_contents(self::API_PATH . "/" . $path, false, $context);
+        $curl = curl_init(self::API_PATH . "/" . $path);
+
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
 
         return json_decode($response);
     }
